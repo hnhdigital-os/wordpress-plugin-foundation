@@ -1,0 +1,19 @@
+{
+    "name": "hnhdigital-os/wordpress-plugin-foundation",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Rocco Howard",
+            "email": "rocco@hnh.digital"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "WordMan\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    }
+}
