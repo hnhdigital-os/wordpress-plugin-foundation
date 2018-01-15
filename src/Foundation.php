@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace WordMan;
+namespace HnhDigital\WordPressPlugin;
 
 class Foundation
 {
@@ -176,7 +176,7 @@ class Foundation
      *
      * @return string
      */
-    public function getWordManUrl($sub_domain, $url = '')
+    public function getRemoteUrl($sub_domain, $url = '')
     {
         return str_replace('//', '//'.$sub_domain.'.', WORDMAN_URL).'/'.$url;
     }

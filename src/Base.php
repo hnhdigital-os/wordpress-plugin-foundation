@@ -3,31 +3,31 @@
 /*
  * This file is part of WordMan WordPress Bootstrap plugin.
  *
- * (c) WordMan <hello@wordman.io>
+ * (c) WordMan <hello@foundation.io>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace WordMan;
+namespace HnhDigital\WordPressPlugin;
 
 class Base
 {
     /**
-     * WordMan.
+     * Foundation.
      * 
      * @var WordMan
      */
-    private $wordman;
+    private $foundation;
 
     /**
      * Initialize the class.
      *
      * @return void
      */
-    public function __construct(&$wordman)
+    public function __construct(&$foundation)
     {
-        $this->wordman = &$wordman;
+        $this->foundation = &$foundation;
 
         $this->boot();
     }
@@ -39,7 +39,7 @@ class Base
      */
     public function name()
     {
-        return $this->wordman->getPluginName();
+        return $this->foundation->getPluginName();
     }
 
     /**
@@ -49,7 +49,7 @@ class Base
      */
     public function version()
     {
-        return $this->wordman->getPluginVersion();
+        return $this->foundation->getPluginVersion();
     }
 
     /**
@@ -62,7 +62,7 @@ class Base
      */
     public function remoteUrl($sub_domain, $path = '')
     {
-        return $this->wordman->getWordManUrl($sub_domain, $path);
+        return $this->foundation->getRemoteUrl($sub_domain, $path);
     }
 
     /**
@@ -75,14 +75,14 @@ class Base
      */
     public function render($template, $data = [])
     {
-        if (($template_file = $this->wordman->getViewPath($template, 'php')) === false) {
+        if (($template_file = $this->foundation->getViewPath($template, 'php')) === false) {
             return '';
         }
 
-        $this->wordman->loadViewAsset($template, 'css');
-        $this->wordman->loadViewAsset($template, 'js');
+        $this->foundation->loadViewAsset($template, 'css');
+        $this->foundation->loadViewAsset($template, 'js');
 
-        $data['wordman'] = $this;
+        $data['foundation'] = $this;
         
         ob_start();
         extract($data);
@@ -102,7 +102,7 @@ class Base
      */
     public function action(...$arguments)
     {
-        $this->wordman->addAction(...$arguments);
+        $this->foundation->addAction(...$arguments);
     }
 
     /**
@@ -114,6 +114,6 @@ class Base
      */
     public function filter(...$arguments)
     {
-        $this->wordman->addAction(...$arguments);
+        $this->foundation->addAction(...$arguments);
     }
 }
