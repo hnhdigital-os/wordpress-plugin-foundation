@@ -35,6 +35,13 @@ class Foundation
     private $plugin_directory;
 
     /**
+     * Remote url.
+     *
+     * @var string
+     */
+    private $remote_url;
+
+    /**
      * Actions.
      *
      * @var array
@@ -64,7 +71,7 @@ class Foundation
         $this->plugin_name = $name;
         $this->plugin_version = $version;
         $this->plugin_directory = $dir;
-        $this->url = $url;
+        $this->remote_url = $url;
 
         // Load all the classes.
         $this->load();
@@ -107,15 +114,15 @@ class Foundation
     /**
      * Add action.
      *
-     * @param string $hook          The name of the WordPress action that is being registered.
      * @param object $component     A reference to the instance of the object on which the action is defined.
+     * @param string $hook          The name of the WordPress action that is being registered.
      * @param string $callback      The name of the function definition on the $component.
      * @param int    $priority      Optional. he priority at which the function should be fired. Default is 10.
      * @param int    $accepted_args Optional. The number of arguments that should be passed to the $callback. 
      *
      * @return void
      */
-    public function addAction($hook, $component, $callback, $priority = 10, $accepted_args = 1)
+    public function addAction($component, $hook, $callback, $priority = 10, $accepted_args = 1)
     {
         $this->wordpress_actions[] = [
             'hook'          => $hook,
@@ -129,15 +136,15 @@ class Foundation
     /**
      * Add filter.
      *
-     * @param string $hook          The name of the WordPress action that is being registered.
      * @param object $component     A reference to the instance of the object on which the action is defined.
+     * @param string $hook          The name of the WordPress action that is being registered.
      * @param string $callback      The name of the function definition on the $component.
      * @param int    $priority      Optional. he priority at which the function should be fired. Default is 10.
      * @param int    $accepted_args Optional. The number of arguments that should be passed to the $callback. 
      *
      * @return void
      */
-    public function addFilter($hook, $component, $callback, $priority = 10, $accepted_args = 1)
+    public function addFilter($component, $hook, $callback, $priority = 10, $accepted_args = 1)
     {
         $this->wordpress_filters[] = [
             'hook'          => $hook,
@@ -154,6 +161,16 @@ class Foundation
      * @return string
      */
     public function getPluginName()
+    {
+        return $this->plugin_name.'/'.$this->plugin_name.'.php';
+    }
+
+    /**
+     * Get plugin slug.
+     *
+     * @return string
+     */
+    public function getPluginSlug()
     {
         return $this->plugin_name;
     }
@@ -176,9 +193,13 @@ class Foundation
      *
      * @return string
      */
-    public function getRemoteUrl($sub_domain, $url = '')
+    public function getRemoteUrl($sub_domain = '', $path = '')
     {
-        return str_replace('//', '//'.$sub_domain.'.', WORDMAN_URL).'/'.$url;
+        $url = $this->remote_url;
+        $url = !empty($sub_domain) ? str_replace('//', '//'.$sub_domain.'.', $url) : $url;
+        $url .= !empty($path) ? '/'.$path : '';
+
+        return $url;
     }
 
     /**
@@ -192,7 +213,19 @@ class Foundation
     {
         $path = str_replace($this->getPluginPath().'/', '', $path);
 
-        return plugin_dir_url(__DIR__).$path;
+        return plugins_url().'/'.$this->getPluginSlug().'/'.$path;
+    }
+
+    /**
+     * Get the view url.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function getViewUrl($path = '')
+    {
+        return $this->getLocalUrl('resources/view/'.$path);
     }
 
     /**
@@ -265,7 +298,7 @@ class Foundation
         }
 
         $function_name = 'wp_enqueue_'.$type;
-        $function_name($this->getPluginName(), $this->getLocalUrl($asset_file), $settings, $this->getPluginVersion(), $location);
+        $function_name($this->getPluginSlug(), $this->getLocalUrl($asset_file), $settings, $this->getPluginVersion(), $location);
 
         return true;
     }
