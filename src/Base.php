@@ -1,15 +1,17 @@
 <?php
 
 /*
- * This file is part of WordMan WordPress Bootstrap plugin.
+ * This file is part of WordPress Plugin Foundation package.
  *
- * (c) WordMan <hello@foundation.io>
+ * (c) Rocco Howard <rocco@hnh.digital>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace HnhDigital\WordPressPlugin;
+
+use GuzzleHttp\Client as GuzzleClient;
 
 class Base
 {
@@ -109,7 +111,9 @@ class Base
      */
     public function adminUrl($path = '')
     {
-        return admin_url('options-general.php?page='.$this->slug().'&'.$path);
+        $path = !empty($path) ? '&'.$path : '';
+
+        return admin_url('options-general.php?page='.$this->slug().$path);
     }
 
     /**
@@ -198,6 +202,8 @@ class Base
      */
     public function callRequest($data)
     {
+        $payload = $data->get_json_params();
+
         @ignore_user_abort(true);
         @set_time_limit(0);
 
@@ -218,9 +224,9 @@ class Base
             }
 
             // Complete the requested method.
-            $result = $this->{'call'.$action}($data);
+            $result = $this->{'call'.$action}($data, $payload);
 
-            return is_null($result) ? (string) true : $return;
+            return is_null($result) ? (string) true : $result;
         }
 
         return $this->callError('no_action_found', 'No action was found matching the request.', 400);
