@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of WordMan WordPress Bootstrap plugin.
+ * This file is part of WordPress Plugin Foundation package.
  *
- * (c) WordMan <hello@wordman.io>
+ * (c) Rocco Howard <rocco@hnh.digital>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -290,7 +290,7 @@ class Foundation
                 break;
             case 'js':
                 $type = 'script';
-                $settings = ['jquery'];
+                $settings = ['jquery', 'underscore', 'wp-util'];
                 $location = false;
                 break;
             default:
