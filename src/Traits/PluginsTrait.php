@@ -59,11 +59,6 @@ trait PluginsTrait
         // Clear plugin cache.
         wp_clean_plugins_cache(true);
 
-        // Activate plugin.
-        if ($plugin_installed) {
-            activate_plugin($destination_path, '', false, false);
-        }
-
         return $plugin_installed;
     }
 
