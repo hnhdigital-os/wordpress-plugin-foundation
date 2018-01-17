@@ -265,23 +265,24 @@ class Base
      *
      * @return void
      */
-    public function callRemote($url, $data)
+    public function callRemote($url, $data = [], $return = true)
     {
+        $success = false;
+
         try {
             $response = (new GuzzleClient())->post($url, ['json' => $data]);
             $contents = $response->getBody()->getContents();
-
-            if (!$contents) {
-                echo 'Failed?';
-            }
-
-            if (strlen($contents) > 1) {
-                echo $contents;
-            }
+            $success = strlen($contents) > 0;
 
         } catch(\Exception $exception) {
-            echo $exception->getMessage();
+            $contents = $exception->getMessage();
         }
+
+        if ($return) {
+            return [$success, $contents];
+        }
+
+        echo $contents;
     }
 
     /**
