@@ -229,7 +229,7 @@ class Base
             return is_null($result) ? (string) true : $result;
         }
 
-        return $this->callError('no_action_found', 'No action was found matching the request.', 400);
+        return $this->errorResponse('no_action_found', ''.$action.' did not match any method.', 400);
     }
 
     /**
